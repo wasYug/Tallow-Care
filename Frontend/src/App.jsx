@@ -1,4 +1,3 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 
 import Navbar from './components/Navbar';
@@ -12,17 +11,10 @@ import Home from './pages/Home';
 import WhyTallow from './pages/WhyTallow';
 import Products from './pages/Products';
 import Mission from './pages/Mission';
+import Sustainability from './pages/Sustainability';
 import Contact from './pages/Contact';
 
 import useToast from './hooks/useToast';
-
-function ScrollToTop() {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-  return null;
-}
 
 export default function App() {
   const { message, visible, showToast } = useToast();
@@ -34,16 +26,14 @@ export default function App() {
       <ClickRipple />
       <Toast message={message} visible={visible} />
       <Navbar />
-      <ScrollToTop />
 
       <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/why-tallow" element={<WhyTallow />} />
-          <Route path="/products" element={<Products showToast={showToast} />} />
-          <Route path="/mission" element={<Mission />} />
-          <Route path="/contact" element={<Contact showToast={showToast} />} />
-        </Routes>
+        <Home />
+        <WhyTallow />
+        <Products showToast={showToast} />
+        <Mission />
+        <Sustainability />
+        <Contact showToast={showToast} />
       </main>
 
       <Footer />

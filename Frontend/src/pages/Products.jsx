@@ -1,15 +1,84 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import useScrollReveal from '../hooks/useScrollReveal';
 
 const products = [
-  { emoji: '🧼', name: 'Lavender Calm Soap', desc: 'Calming tallow soap infused with organic lavender essential oils. Perfect for anxious pets with sensitive skin.', price: '$24.99', stars: '★★★★★', count: 142, badge: 'Bestseller', bg: 'sage-bg' },
-  { emoji: '🍯', name: 'Oatmeal Honey Soap', desc: 'Gentle oatmeal formula with clover honey. Specially crafted for sensitive coats and dry, irritated skin.', price: '$22.99', stars: '★★★★½', count: 98, badge: 'Popular', bg: 'yellow-bg' },
-  { emoji: '🐾', name: 'Healing Paw Balm', desc: 'Intensive paw repair. Repairs cracked paws and dry crevice problems for happy, comfortable paws everyday.', price: '$18.99', stars: '★★★★★', count: 207, badge: 'New', bg: 'coral-bg' },
-  { emoji: '🌱', name: 'Eucalyptus Fresh Soap', desc: 'Refreshing eucalyptus tallow soap with natural deodorising properties. Leaves coats shiny and clean.', price: '$26.99', stars: '★★★★★', count: 76, badge: 'Fresh', bg: 'mint-bg' },
-  { emoji: '🌹', name: 'Rosemary Shine Shampoo', desc: 'Stimulating rosemary tallow shampoo that promotes healthy coat growth and adds brilliant, lustrous shine.', price: '$28.99', stars: '★★★★★', count: 134, badge: 'Loved', bg: 'rose-bg' },
-  { emoji: '✨', name: 'Complete Care Bundle', desc: "Our best-selling starter kit — everything you need for a full, natural skincare routine for your beloved pet.", price: '$59.99', stars: '★★★★★', count: 415, badge: 'Best Value', bg: 'sky-bg' },
+  {
+    name: 'Feline Gentle Care',
+    forTag: 'Cats',
+    desc: 'Gentle, vet-safe care made for sensitive feline skin.',
+    originalPrice: 200,
+    discount: 51,
+    stars: '★★★★★',
+    count: 142,
+    images: [
+      '/products/prod1/image.png',
+      '/products/prod1/_5A2EE1DC-46DD-41FE-9D67-844507B7FF8A_-removebg-preview.png',
+      '/products/prod1/_81BD2ED6-B12D-4CCD-B5FB-790CB9F2ABD0_-removebg-preview.png'
+    ]
+  },
+  {
+    name: 'Canine Active Protection',
+    forTag: 'Dogs',
+    desc: 'Strong cleansing with natural protection for active dogs.',
+    originalPrice: 200,
+    discount: 51,
+    stars: '★★★★★',
+    count: 98,
+    images: [
+      '/products/prod2/image.png',
+      '/products/prod2/_4C98F61E-6929-48FA-B720-9E937DE5F643_-removebg-preview.png',
+      '/products/prod2/_63AB8781-E897-40A6-9A76-7296AF0A7EE9_-removebg-preview.png'
+    ]
+  },
+  {
+    name: 'Universal Pet Health',
+    forTag: 'All Pets',
+    desc: 'Universal care products safe for every animal.',
+    originalPrice: 200,
+    discount: 51,
+    stars: '★★★★★',
+    count: 207,
+    images: [
+      '/products/prod3/image.png',
+      '/products/prod3/_84A9A0AF-32BF-4F13-9920-F74AF24B7BC6_-removebg-preview.png',
+      '/products/prod3/_4FEBF93A-8511-4358-AC0A-ECE2A409DAC6_-removebg-preview.png'
+    ]
+  }
 ];
+
+const ImageSlider = ({ images }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 2500); // 1 sec interval
+    return () => clearInterval(timer);
+  }, [images.length]);
+
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
+      {images.map((img, idx) => (
+        <img
+          key={idx}
+          src={img}
+          alt={`Product slide ${idx}`}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            padding: '24px',
+            opacity: currentIndex === idx ? 1 : 0,
+            transition: 'opacity 0.4s ease-in-out'
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
 export default function Products({ showToast }) {
   const [cartStates, setCartStates] = useState({});
@@ -25,7 +94,7 @@ export default function Products({ showToast }) {
   };
 
   return (
-    <section className="products-bg section-padding page-top">
+    <section id="products" className="products-bg section-padding page-top">
       <span className="section-tag sr">Our Collection</span>
       <h2 className="section-title sr sr-delay-1">Premium Products</h2>
       <p className="section-sub sr sr-delay-2">
@@ -50,20 +119,35 @@ export default function Products({ showToast }) {
               e.currentTarget.style.transform = '';
             }}
           >
-            <div className={`product-img-wrap ${p.bg}`}>
-              <span className="product-badge">{p.badge}</span>
-              <span className="product-emoji">{p.emoji}</span>
+            <div className="product-img-wrap" style={{ background: 'radial-gradient(circle at center, #ffffff 0%, #f2efe9 100%)', padding: 0 }}>
+              <span className="product-badge" style={{ zIndex: 10, background: 'var(--color-sage)', color: '#fff', boxShadow: '0 4px 12px rgba(119,138,108,.3)', fontWeight: '600' }}>{p.forTag}</span>
+              <ImageSlider images={p.images} />
             </div>
-            <div className="product-info">
-              <h3>{p.name}</h3>
-              <p>{p.desc}</p>
-              <div className="product-footer">
-                <span className="price">{p.price}</span>
-                <div>
-                  <span className="stars">{p.stars}</span>
-                  <span className="rating-count">({p.count})</span>
+            <div className="product-info" style={{ padding: '24px 20px' }}>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '8px', color: 'var(--color-text-dark)', fontWeight: '700', letterSpacing: '-0.3px' }}>{p.name}</h3>
+              <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: '1.5', marginBottom: '20px' }}>{p.desc}</p>
+              
+              <div className="product-footer" style={{ marginBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                    <span style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--color-text-dark)', letterSpacing: '-0.5px' }}>
+                      ₹{Math.round(p.originalPrice * (1 - p.discount / 100))}
+                    </span>
+                    <span style={{ textDecoration: 'line-through', color: '#a0a0a0', fontSize: '0.95rem', fontWeight: '500' }}>
+                      ₹{p.originalPrice}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '0.75rem', color: '#d35400', fontWeight: '700', background: '#ffeaa7', padding: '4px 10px', borderRadius: '20px', display: 'inline-flex', alignItems: 'center', gap: '4px', boxShadow: '0 2px 8px rgba(211,84,0,0.15)' }}>
+                    🔥 {p.discount}% OFF
+                  </span>
+                </div>
+                
+                <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ color: '#f39c12', fontSize: '0.9rem', letterSpacing: '1px' }}>{p.stars}</span>
+                  <span style={{ color: '#888', fontSize: '0.8rem', fontWeight: '500' }}>({p.count} reviews)</span>
                 </div>
               </div>
+              
               <button
                 className="btn-cart"
                 style={cartStates[i] ? { background: 'var(--color-sage)' } : {}}
@@ -77,9 +161,9 @@ export default function Products({ showToast }) {
       </div>
 
       <div className="view-all-wrap sr">
-        <Link to="/products" className="btn-outline">
+        <a href="#products" className="btn-outline">
           View All Products →
-        </Link>
+        </a>
       </div>
     </section>
   );

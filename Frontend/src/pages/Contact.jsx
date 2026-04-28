@@ -14,7 +14,7 @@ export default function Contact({ showToast }) {
   };
 
   return (
-    <section className="contact-section section-padding page-top">
+    <section id="contact" className="contact-section section-padding page-top">
       <div className="contact-grid">
         {/* LEFT */}
         <div className="contact-left sr from-left">

@@ -56,7 +56,7 @@ export default function WhyTallow() {
 
   return (
     <>
-      <section className="why-bg section-padding page-top">
+      <section id="why-tallow" className="why-bg section-padding page-top">
         <span className="section-tag sr">Achieve Nature's Nature</span>
         <h2 className="section-title sr sr-delay-1">Why Tallow?</h2>
         <p className="section-sub sr sr-delay-2">
@@ -68,7 +68,14 @@ export default function WhyTallow() {
             <div
               key={f.title}
               className={`feature-card sr sr-delay-${i + 1}`}
+              onClick={(e) => {
+                if (window.innerWidth <= 900) {
+                  e.currentTarget.classList.toggle('is-flipped');
+                  e.currentTarget.querySelector('.card-inner').classList.add('was-flipped');
+                }
+              }}
               onMouseMove={(e) => {
+                if (window.innerWidth <= 900) return;
                 const rect = e.currentTarget.getBoundingClientRect();
                 const cx = rect.left + rect.width / 2;
                 const cy = rect.top + rect.height / 2;
@@ -77,12 +84,27 @@ export default function WhyTallow() {
                 e.currentTarget.style.transform = `translateY(-8px) perspective(600px) rotateX(${-dy * 4}deg) rotateY(${dx * 4}deg) scale(1.01)`;
               }}
               onMouseLeave={(e) => {
+                if (window.innerWidth <= 900) return;
                 e.currentTarget.style.transform = '';
               }}
             >
-              <div className={`feature-icon ${f.color}`}>{f.emoji}</div>
-              <h3>{f.title}</h3>
-              <p>{f.desc}</p>
+              <div className="card-inner">
+                <div className="face front">
+                  <div className={`feature-icon ${f.color}`}>{f.emoji}</div>
+                  <h3>{f.title}</h3>
+                  <p className="front-desc">{f.desc}</p>
+                  <div className="tap-hint">
+                    <span>Tap to read</span>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 5l7 7-7 7"/></svg>
+                  </div>
+                </div>
+                <div className="face back">
+                  <div>
+                    <h3>{f.title}</h3>
+                    <p>{f.desc}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
         </div>

@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import ParticleCanvas from '../components/ParticleCanvas';
 import Marquee from '../components/Marquee';
 import useScrollReveal from '../hooks/useScrollReveal';
@@ -9,7 +8,7 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
-      <section className="hero-section">
+      <section id="home" className="hero-section">
         <ParticleCanvas />
         <div className="blob blob-1" />
         <div className="blob blob-2" />
@@ -28,9 +27,9 @@ export default function Home() {
             pet's sensitive skin.
           </p>
           <div className="hero-ctas">
-            <Link to="/products" className="btn-primary">
+            <a href="#products" className="btn-primary">
               🛒 Shop Collection
-            </Link>
+            </a>
             <span className="badge">🐾 Happy Pets</span>
           </div>
         </div>
